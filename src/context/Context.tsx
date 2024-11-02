@@ -1,25 +1,28 @@
-import { createContext, useState } from "react";
+import { createContext, useState,ReactNode } from "react";
 
 
-type ContextType = {
+export interface ContextType {
     search:string,
     setSearch:(e:string)=>void;
+    darkMode:boolean,
+    setDarkMode:(e:boolean)=>void;
 }
 
 interface ChildrenType{
-    children:React.ReactNode
+    children:ReactNode
 }
 
 
-export const Context = createContext<ContextType|null>(null);
+export const Context = createContext<ContextType | undefined>(undefined);
 
 function ContextProvider({children}:ChildrenType){
     const [search, setSearch] = useState<string>("");
-    
-    const value = {search,setSearch};
+    const [darkMode, setDarkMode] = useState<boolean>(false)
+
+    const contextValues:ContextType = {search,setSearch,darkMode,setDarkMode};
 
     return(
-        <Context.Provider value={value}>
+        <Context.Provider value={contextValues}>
             {children}
         </Context.Provider>
     )
