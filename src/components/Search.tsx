@@ -3,6 +3,11 @@ import { BiSearch } from 'react-icons/bi';
 import { Context } from '../context/Context';
 
 function Search() {
+    const context = useContext(Context);
+
+    if (!context) {
+        throw new Error("SomeComponent must be used within a ContextProvider");
+    }
   
   const {search,setSearch} = useContext(Context);
   

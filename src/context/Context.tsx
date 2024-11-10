@@ -1,9 +1,27 @@
 import { createContext, useState,ReactNode } from "react";
 
+export type Note = {
+    id?:string,
+    title:string,
+    content:string,
+    favorite:boolean,
+    createdAt?:string,
+    updatedAt?:string
+}
 
-export interface ContextType {
+export type CreateNoteType = {
+    title: string,
+    content: string,
+    favorite?: boolean
+}
+
+export type ContextType ={
     search:string,
     setSearch:(e:string)=>void;
+    notes:Note[],
+    setNotes:(e:Note[])=>void;
+    createNote:CreateNoteType,
+    setCreateNote:(e:CreateNoteType)=>void,
     darkMode:boolean,
     setDarkMode:(e:boolean)=>void;
 }
@@ -16,10 +34,11 @@ interface ChildrenType{
 export const Context = createContext<ContextType | undefined>(undefined);
 
 function ContextProvider({children}:ChildrenType){
-    const [search, setSearch] = useState<string>("");
-    const [darkMode, setDarkMode] = useState<boolean>(false)
-
-    const contextValues:ContextType = {search,setSearch,darkMode,setDarkMode};
+    const [search, setSearch] = useState("");
+    const [notes,setNotes] = useState<Note[]>([]);
+    const [darkMode, setDarkMode] = useState(false);
+    const [createNote, setCreateNote] = useState<CreateNoteType>({title:"",content:""});
+    const contextValues:ContextType = {search,setSearch,darkMode,setDarkMode,notes,setNotes,createNote,setCreateNote};
 
     return(
         <Context.Provider value={contextValues}>

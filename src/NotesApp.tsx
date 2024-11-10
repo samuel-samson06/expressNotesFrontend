@@ -1,24 +1,34 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Header from './components/Header';
 import Search from './components/Search';
 import Notes from './pages/Notes';
-import {notes} from "./utils/fakeData.ts";
+// import {notes} from "./utils/fakeData.ts";
 import { Link } from 'react-router-dom';
 import { Context } from './context/Context.tsx';
+import axios from 'axios';
 
 
 type NotesType = {
-    id:number,
+    _id:string,
     title:string,
     content:string,
-    date:string,
-    favorites:boolean
+    createdAt:string,
+    favorite:boolean
   }
 
 function NotesApp() {
-  const {search} = useContext(Context)
+  const {search,notes,setNotes} = useContext(Context);
+  const getData = async()=>{
+    const response  = await axios.get("http://localhost:5000/api/notes");
+    setNotes(response.data);
+    console.log(response.data) 
+  }
 
-  const searchNotes = search.length===0?notes:notes.filter((eachNote)=>{
+  useEffect(()=>{
+    getData();
+  },[])
+
+  const searchNotes = search.length===0?notes:notes.filter((eachNote:NotesType)=>{
     return eachNote.title.toLowerCase().startsWith(search.toLowerCase())
   }) 
 
@@ -32,11 +42,11 @@ function NotesApp() {
             </header>
             <main className=' grid grid-cols-1 gap-4'>
             {
-                searchNotes.length===0?<p className=' font-medium'>No Such Notes</p>:searchNotes.map((eachNote:NotesType)=>{
+                searchNotes.length===0?<p className=' font-medium'>No  Notes</p>:searchNotes.map((eachNote:NotesType)=>{
                   return(
-                      <React.Fragment key={eachNote.id}>
-                        <Link to={`/${eachNote.id}`}>
-                          <Notes title={eachNote.title} content={eachNote.content} date={eachNote.date} favorite={eachNote.favorites}/>
+                      <React.Fragment key={eachNote._id}>
+                        <Link to={`/${eachNote._id}`}>
+                          <Notes title={eachNote.title} content={eachNote.content} date={eachNote.createdAt} favorite={eachNote.favorite}/>
                         </Link>
                       </React.Fragment>
                   )

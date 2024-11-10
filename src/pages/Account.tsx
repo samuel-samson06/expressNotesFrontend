@@ -18,9 +18,7 @@ function Account() {
 
     const handleDarkMode = ()=>{
         // alert("Okay");
-        setDarkMode((prev:boolean)=>{
-            return !prev;
-        })
+        setDarkMode(!darkMode)
     }
     const handleRevealFav =()=>{
         setRevealFavorites(prev=>!prev);
